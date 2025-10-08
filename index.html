@@ -22,7 +22,7 @@
   <meta property="og:title" content="Aurevo｜網站設計師 · 單檔 HTML 網站、登陸頁、SEO 與效能優化"/>
   <meta property="og:description" content="單一 HTML 也能專業：RWD、SEO/GA4、表單整合、輕電商、效能最佳化。適合個人與小型商家，快速上線。"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://my-project-542.pages.dev/"/>
+  <meta property="og:url" content="https://auvero2025.pages.dev/"/>
   <meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%25' height='100%25' fill='%230a0a0a'/><text x='50%25' y='50%25' fill='%23ffffff' font-family='Arial' font-size='48' text-anchor='middle' dominant-baseline='middle'>Aurevo · Web Designer</text></svg>"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Aurevo｜網站設計師 · 單檔 HTML 網站、登陸頁、SEO 與效能優化"/>
@@ -235,7 +235,7 @@
   <!-- ===== JSON-LD ===== -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org","@type": "Organization","name": "Aurevo","url": "https://my-project-542.pages.dev/","logo": "images/aurevo_logo_v2_symbol.png",
+    "@context": "https://schema.org","@type": "Organization","name": "Aurevo","url": "https://auvero2025.pages.dev/","logo": "images/aurevo_logo_v2_symbol.png",
     "description": "Aurevo 專做單檔 HTML 網站與登陸頁：RWD、SEO/GA4、表單整合、輕電商與效能最佳化，快速上線、維護成本低。",
     "sameAs": ["https://www.linkedin.com/","https://x.com/","https://www.behance.net/"],
     "areaServed": ["Taiwan","Malaysia"],
@@ -539,12 +539,18 @@
       <div class="container">
         <h2 class="reveal">聯絡我／取得報價</h2>
         <div class="grid grid-2">
-          <form id="form" class="card reveal" method="POST" action="https://formsubmit.co/aurevo2001@gmail.com" novalidate>
+          <form id="form" class="card reveal" method="POST" action="https://formsubmit.co/aurevo2001@gmail.com">
           <input type="hidden" name="_subject" value="Aurevo 網站詢問單"/>
           <input type="hidden" name="_template" value="table"/>
           <input type="hidden" name="_captcha" value="false"/>
           <input type="hidden" name="_next" value="https://auvero2025.pages.dev/?sent=1#contact"/>
           <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"/>
+          <!-- 可選優化：自動回覆 & 關鍵字黑名單 -->
+          <input type="hidden" name="_autoresponse" value="已收到您的詢問，我會在 1–2 個工作天內回覆。— Aurevo"/>
+          <input type="hidden" name="_blacklist" value="viagra,loan,$$$,casino,adult"/>
+          <!-- 蜂蜜欄位（防機器人） -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"/>
+
             <div class="form-row">
               <div><label for="name">你的稱呼</label><input id="name" name="name" placeholder="王小明" required/></div>
               <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required/></div>
@@ -639,9 +645,16 @@
     ;(function attachSwipe(el){if(!el)return;let startX=0,dx=0,drag=false;const onStart=e=>{drag=true;startX=(e.touches?e.touches[0].clientX:e.clientX);dx=0;clearInterval(timer);el.style.transition='none'};const onMove=e=>{if(!drag)return;const x=(e.touches?e.touches[0].clientX:e.clientX);dx=x-startX;const w=el.getBoundingClientRect().width;const offsetPct=(-idx*100)+(dx/w)*100;el.style.transform=`translate3d(${offsetPct}%,0,0)`};const onEnd=()=>{if(!drag)return;drag=false;el.style.transition='transform .45s ease';const w=el.getBoundingClientRect().width;if(Math.abs(dx)>w*0.25){go(idx+(dx<0?1:-1))}else{go(idx)}auto()};el.addEventListener('pointerdown',onStart);el.addEventListener('pointermove',onMove);el.addEventListener('pointerup',onEnd);el.addEventListener('pointercancel',onEnd);el.addEventListener('touchstart',onStart,{passive:true});el.addEventListener('touchmove',onMove,{passive:true});el.addEventListener('touchend',onEnd,{passive:true})})(slidesEl);
     if(slidesEl&&dots.length){go(0);auto();normalizeSliderHeight()}
 
-    /* ==== 假送出表單（示範）==== */
-    const form=$('#form'), status=$('#form-status');
-    form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity()){status.textContent=i18n.t('form.required');return}status.textContent=i18n.t('form.received');form.reset()});
+    /* REPLACE START: 真實送出後顯示成功訊息（依 URL 參數） */
+    const status = $('#form-status');
+    const params = new URL(location.href).searchParams;
+    if (params.get('sent') === '1' && status) {
+      status.textContent = i18n.t('form.received');
+      // 可選：自動捲到聯絡區塊頂端
+      const contact = document.getElementById('contact');
+      contact && contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    /* REPLACE END */
 
     /* ==== Back to Top ==== */
     $('#backTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
