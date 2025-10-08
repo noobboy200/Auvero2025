@@ -539,7 +539,12 @@
       <div class="container">
         <h2 class="reveal">聯絡我／取得報價</h2>
         <div class="grid grid-2">
-          <form id="form" class="card reveal" novalidate>
+          <form id="form" class="card reveal" method="POST" action="https://formsubmit.co/aurevo2001@gmail.com" novalidate>
+          <input type="hidden" name="_subject" value="Aurevo 網站詢問單"/>
+          <input type="hidden" name="_template" value="table"/>
+          <input type="hidden" name="_captcha" value="false"/>
+          <input type="hidden" name="_next" value="https://auvero2025.pages.dev/?sent=1#contact"/>
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"/>
             <div class="form-row">
               <div><label for="name">你的稱呼</label><input id="name" name="name" placeholder="王小明" required/></div>
               <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required/></div>
