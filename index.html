@@ -566,12 +566,18 @@
             <button class="btn primary" type="submit">送出需求</button>
             <p id="form-status" class="muted" role="status"></p>
           </form>
-          <aside class="card reveal" style="padding:16px">
-            <h3>其他聯絡方式</h3>
-            <p class="muted">Email：<a href="mailto:hello@example.com">hello@example.com</a><br/>LinkedIn／X／Behance：<a href="#">@yourhandle</a></p>
-            <p class="muted">工作地點：遠端</p>
-            <div class="work-thumb" aria-hidden="true" style="border-radius:12px"></div>
-          </aside>
+          <!-- REPLACE START: Contact aside - Gmail/LINE/Facebook only -->
+            <aside class="card reveal" style="padding:16px">
+              <h3>其他聯絡方式</h3>
+                <p class="muted">
+              Email：<a href="mailto:aurevo2001@gmail.com">aurevo2001@gmail.com</a><br/>
+              LINE：<a href="https://lin.ee/WHO6QYb" rel="me" target="_blank">加入好友</a><br/>
+              Facebook：<a href="https://www.facebook.com/profile.php?id=61582086684150&sk=about" rel="me" target="_blank">aurevo.web</a>
+                </p>
+                <p class="muted">工作地點：遠端</p>
+              <div class="work-thumb" aria-hidden="true" style="border-radius:12px"></div>
+            </aside>
+          <!-- REPLACE END: Contact aside - Gmail/LINE/Facebook only -->
         </div>
       </div>
     </section>
@@ -582,6 +588,10 @@
     <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <p class="muted">© <span id="year"></span> Aurevo · Web Designer</p>
       <div style="display:flex;gap:8px"><a class="tag" href="#work">作品</a><a class="tag" href="#pricing">方案</a><a class="tag" href="#contact">聯絡</a></div>
+      <!-- INSERT: footer social shortcuts -->
+      <a class="tag" href="mailto:aurevo2001@gmail.com">Gmail</a>
+      <a class="tag" href="https://lin.ee/WHO6QYb" target="_blank" rel="me">LINE</a>
+      <a class="tag" href="https://www.facebook.com/profile.php?id=61582086684150&sk=about" target="_blank" rel="me">Facebook</a>
     </div>
   </footer>
 
