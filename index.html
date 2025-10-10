@@ -139,6 +139,11 @@
     .client-logo{max-width:120px;max-height:42px;object-fit:contain;filter:grayscale(100%);transition:filter .2s,transform .2s}
     .client-card:hover .client-logo{filter:grayscale(0%);transform:scale(1.04)}
     @media (max-width:640px){.client-logo{max-width:100px;max-height:36px}}
+    /* Clients: allow text-only cards */
+    .client-card{gap:10px;min-height:64px}
+    .client-card .client-title{font-weight:700;color:var(--text);letter-spacing:.2px}
+    @media (max-width:640px){.client-card{padding:16px}}
+
 
     /* INSERT START: About styles */
     #about .about-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
@@ -200,6 +205,17 @@
     .dot{width:10px;height:10px;border-radius:50%;background:var(--border);border:none;cursor:pointer;transition:transform .15s,background .15s}
     .dot.active{background:var(--accent);transform:scale(1.1)}
     #testimonials,#testimonials *{max-width:100%}
+
+    /* ==== Add-ons / 其他加值服務 ==== */
+    #addons .addon-wrap{display:grid;gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))}
+    #addons .addon.card{padding:18px 20px}
+    #addons .addon h3{margin:0 0 8px;font-size:1.04rem}
+    #addons .addon ul{margin:0;padding-left:1.1rem;list-style:disc;display:grid;gap:8px}
+    #addons .addon li{display:flex;align-items:flex-start;gap:10px}
+    #addons .addon li span.label{flex:1;min-width:0}
+    #addons .price-pill{padding:2px 10px;border-radius:999px;border:1px solid var(--border);background:var(--elev);font-size:.9rem;white-space:nowrap}
+    #addons .note{margin-top:10px}
+    @media (max-width:980px){#addons .addon-wrap{grid-template-columns:1fr}}
 
     /* ==== FAQ ==== */
     .faq{border:1px solid var(--border);border-radius:14px;overflow:hidden}
@@ -315,11 +331,15 @@
       </div>
 
       <div class="container" style="margin-top:24px">
-        <div class="grid grid-4 clients">
-          <a href="https://client-a.com" target="_blank" rel="noopener" class="client-card" aria-label="前往 Client A 官網（新分頁開啟）"><img src="https://dummyimage.com/200x60/0a0a0a/ffffff.png&text=Client+A" alt="Client A Logo" class="client-logo" loading="lazy" decoding="async"/></a>
-          <a href="https://client-b.com" target="_blank" rel="noopener" class="client-card" aria-label="前往 Client B 官網（新分頁開啟）"><img src="https://dummyimage.com/200x60/0a0a0a/ffffff.png&text=Client+B" alt="Client B Logo" class="client-logo" loading="lazy" decoding="async"/></a>
-          <a href="https://client-c.com" target="_blank" rel="noopener" class="client-card" aria-label="前往 Client C 官網（新分頁開啟）"><img src="https://dummyimage.com/200x60/0a0a0a/ffffff.png&text=Client+C" alt="Client C Logo" class="client-logo" loading="lazy" decoding="async"/></a>
-          <a href="https://client-d.com" target="_blank" rel="noopener" class="client-card" aria-label="前往 Client D 官網（新分頁開啟）"><img src="https://dummyimage.com/200x60/0a0a0a/ffffff.png&text=Client+D" alt="Client D Logo" class="client-logo" loading="lazy" decoding="async"/></a>
+        <div class="grid grid-4 clients" id="clients">
+          <a href="https://netzero-gnzs.pages.dev/" target="_blank" rel="noopener"
+             class="client-card" aria-label="瀏覽企業案例（新分頁）">
+            <span class="client-title" data-i18n="clients.business">企業案例</span>
+          </a>
+          <a href="https://puahuangshu.pages.dev/" target="_blank" rel="noopener"
+             class="client-card" aria-label="瀏覽個人介紹案例（新分頁）">
+            <span class="client-title" data-i18n="clients.personal">個人介紹案例</span>
+          </a>
         </div>
       </div>
     </section>
@@ -345,19 +365,19 @@
       <div class="container">
         <h2 class="reveal">模板</h2>
         <div class="grid grid-3" id="portfolio">
-          <a class="work-card card reveal" href="https://resilient-mochi-bbe186.netlify.app/" target="_blank" rel="noopener" aria-label="前往 個人品牌網站">
+          <a class="work-card card reveal" href="https://personaldesign.pages.dev/" target="_blank" rel="noopener" aria-label="前往 個人品牌網站">
             <figure class="work-figure"><img src="images/personal_brand_v1.jpeg" alt="專案 A — 個人品牌網站" loading="lazy" decoding="async"/></figure>
             <div class="work-info">
               <strong data-i18n="work.a.title">專案 A</strong>
               <span class="muted">個人品牌網站</span></div>
           </a>
-          <a class="work-card card reveal" href="https://designerstudent.netlify.app/" target="_blank" rel="noopener" aria-label="前往 個人作品集">
+          <a class="work-card card reveal" href="https://designerstudent.pages.dev/" target="_blank" rel="noopener" aria-label="前往 個人作品集">
             <figure class="work-figure"><img src="images/personal_team_brand_v1.jpeg" alt="專案 B — 個人作品集" loading="lazy" decoding="async"/></figure>
             <div class="work-info">
               <strong data-i18n="work.b.title">專案 B</strong>
               <span class="muted">個人作品集</span></div>
           </a>
-          <a class="work-card card reveal" href="https://merchant9986.netlify.app/" target="_blank" rel="noopener" aria-label="前往 商家品牌">
+          <a class="work-card card reveal" href="https://merchant2025.pages.dev/" target="_blank" rel="noopener" aria-label="前往 商家品牌">
             <figure class="work-figure"><img src="images/merchant_brand_v1.jpeg" alt="專案 C — 商家品牌" loading="lazy" decoding="async"/></figure>
             <div class="work-info">
               <strong data-i18n="work.c.title">專案 C</strong>
@@ -498,6 +518,80 @@
         <p class="muted note reveal">若需維護服務，至少需簽訂 6 個月方案</p>
       </div>
     </section>
+  
+    <section id="addons">
+      <div class="container">
+        <h2 class="reveal" data-i18n="sec.addons">其他加值服務</h2>
+        <p class="muted reveal" data-i18n="sec.addons.lead">可依需求自由加購、組合。</p>
+
+        <div class="addon-wrap" style="margin-top:12px">
+          <!-- 設計與功能類 -->
+          <article class="card addon reveal">
+            <h3 data-i18n="addons.cat1">設計與功能類</h3>
+            <ul>
+              <li>
+                <span class="label" data-i18n="ad1.1">多語系網站：提供語言切換功能</span>
+                <span class="price-pill" data-i18n="ad1.1.p">+NT$3,000 / 語言</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad1.2">深色 / 淺色雙模式切換（自動與手動）</span>
+                <span class="price-pill" data-i18n="ad1.2.p">+NT$1,500</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad1.3">品牌配色與客製主題設計</span>
+                <span class="price-pill" data-i18n="ad1.3.p">NT$2,000+</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad1.4">動畫與動態滾動效果</span>
+                <span class="price-pill" data-i18n="ad1.4.p">NT$2,000+</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad1.5">專屬圖示 / Icon 設計</span>
+                <span class="price-pill" data-i18n="ad1.5.p">NT$1,000+</span>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 行銷與數據分析類 -->
+          <article class="card addon reveal">
+            <h3 data-i18n="addons.cat2">行銷與數據分析類</h3>
+            <ul>
+              <li>
+                <span class="label" data-i18n="ad2.1">Google Map / 商家整合</span>
+                <span class="price-pill" data-i18n="ad2.1.p">+NT$800</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad2.2">Meta / IG / LINE / YouTube 社群整合</span>
+                <span class="price-pill" data-i18n="ad2.2.p">NT$500+</span>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 系統與技術支援類 -->
+          <article class="card addon reveal">
+            <h3 data-i18n="addons.cat3">系統與技術支援類</h3>
+            <ul>
+              <li>
+                <span class="label" data-i18n="ad3.1">自訂網域設定 + SSL 憑證</span>
+                <span class="price-pill" data-i18n="ad3.1.p">NT$1,000+</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad3.2">R2 / Cloudflare 圖片托管設定</span>
+                <span class="price-pill" data-i18n="ad3.2.p">NT$1,500+</span>
+              </li>
+              <li>
+                <span class="label" data-i18n="ad3.3">網站備份與版本保存機制（每月）</span>
+                <span class="price-pill" data-i18n="ad3.3.p">+NT$500 / 月</span>
+              </li>
+            </ul>
+          </article>
+        </div>
+        
+        <p class="muted note reveal" data-i18n="addons.note">
+          加值服務將依實際需求調整，費用非固定。
+        </p>
+      </div>
+    </section>
 
     <!-- ==== Testimonials ==== -->
     <section id="testimonials">
@@ -620,7 +714,7 @@
     const $=(s,sc=document)=>sc.querySelector(s), $$=(s,sc=document)=>Array.from(sc.querySelectorAll(s));
 
     /* ==== Sticky Header / Active Nav ==== */
-    const header=$('#site-header');const sections=['services','work','process','about','pricing','faq','contact'].map(id=>({id,el:$('#'+id)}));const navLinks=$$('#nav a');
+    const header=$('#site-header');const sections=['services','work','process','about','pricing','addons','faq','contact'].map(id=>({id,el:$('#'+id)}));
     const onScroll=()=>{header.classList.toggle('scrolled',window.scrollY>10);const y=window.scrollY+120;for(const {id,el} of sections){if(!el)continue;const top=el.offsetTop,b=top+el.offsetHeight;const link=$(`#nav a[href="#${id}"]`);if(y>=top&&y<b){navLinks.forEach(a=>a.classList.remove('active'));link&&link.classList.add('active')}}$('#backTop').classList.toggle('show',window.scrollY>600)};
     window.addEventListener('scroll',onScroll,{passive:true});
 
@@ -746,6 +840,40 @@
         {sel:'#contact .help',key:'form.help',type:'text'},{sel:'#contact button[type="submit"]',key:'form.submit',type:'text'},
         {sel:'footer .tag[href="#work"]',key:'nav.work',type:'text'},{sel:'footer .tag[href="#pricing"]',key:'nav.pricing',type:'text'},{sel:'footer .tag[href="#contact"]',key:'nav.contact',type:'text'},
         {sel:'#backTop',key:'ui.backTop',type:'attr',attr:'aria-label'}
+        { sel:'#clients .client-card:nth-of-type(1) .client-title', key:'clients.business', type:'text' },
+        { sel:'#clients .client-card:nth-of-type(2) .client-title', key:'clients.personal', type:'text' },
+
+        { sel:'#addons [data-i18n="sec.addons"]', key:'sec.addons', type:'text' },
+        { sel:'#addons [data-i18n="sec.addons.lead"]', key:'sec.addons.lead', type:'text' },
+
+        { sel:'#addons [data-i18n="addons.cat1"]', key:'addons.cat1', type:'text' },
+        { sel:'#addons [data-i18n="addons.cat2"]', key:'addons.cat2', type:'text' },
+        { sel:'#addons [data-i18n="addons.cat3"]', key:'addons.cat3', type:'text' },
+
+        { sel:'#addons [data-i18n="ad1.1"]', key:'ad1.1', type:'text' },
+        { sel:'#addons [data-i18n="ad1.1.p"]', key:'ad1.1.p', type:'text' },
+        { sel:'#addons [data-i18n="ad1.2"]', key:'ad1.2', type:'text' },
+        { sel:'#addons [data-i18n="ad1.2.p"]', key:'ad1.2.p', type:'text' },
+        { sel:'#addons [data-i18n="ad1.3"]', key:'ad1.3', type:'text' },
+        { sel:'#addons [data-i18n="ad1.3.p"]', key:'ad1.3.p', type:'text' },
+        { sel:'#addons [data-i18n="ad1.4"]', key:'ad1.4', type:'text' },
+        { sel:'#addons [data-i18n="ad1.4.p"]', key:'ad1.4.p', type:'text' },
+        { sel:'#addons [data-i18n="ad1.5"]', key:'ad1.5', type:'text' },
+        { sel:'#addons [data-i18n="ad1.5.p"]', key:'ad1.5.p', type:'text' },
+
+        { sel:'#addons [data-i18n="ad2.1"]', key:'ad2.1', type:'text' },
+        { sel:'#addons [data-i18n="ad2.1.p"]', key:'ad2.1.p', type:'text' },
+        { sel:'#addons [data-i18n="ad2.2"]', key:'ad2.2', type:'text' },
+        { sel:'#addons [data-i18n="ad2.2.p"]', key:'ad2.2.p', type:'text' },
+
+        { sel:'#addons [data-i18n="ad3.1"]', key:'ad3.1', type:'text' },
+        { sel:'#addons [data-i18n="ad3.1.p"]', key:'ad3.1.p', type:'text' },
+        { sel:'#addons [data-i18n="ad3.2"]', key:'ad3.2', type:'text' },
+        { sel:'#addons [data-i18n="ad3.2.p"]', key:'ad3.2.p', type:'text' },
+        { sel:'#addons [data-i18n="ad3.3"]', key:'ad3.3', type:'text' },
+        { sel:'#addons [data-i18n="ad3.3.p"]', key:'ad3.3.p', type:'text' },
+
+        { sel:'#addons [data-i18n="addons.note"]', key:'addons.note', type:'text' },
       ];
       const STRINGS={
         zh:{'hero.tag':'可客製化 · RWD 響應式 · SEO 友善','ui.menu':'目錄','hero.h1':'為你的品牌，打造<strong>低成本</strong><strong>高品質</strong>的網站體驗。',
@@ -759,6 +887,9 @@
             'sec.stack':'技術與工具','stack.1.title':'HTML5','stack.1.desc':'語意化／結構化','stack.2.title':'CSS3','stack.2.desc':'RWD／Grid／動畫','stack.3.title':'JavaScript','stack.3.desc':'互動效果／表單驗證','stack.4.title':'效能最佳化','stack.4.desc':'Lazyload／圖片壓縮／預連線','stack.5.title':'SEO / GA4','stack.5.desc':'標籤／追蹤碼／事件','stack.6.title':'SVG & 動態效果','stack.6.desc':'客製圖示／輕量動效',
             'sec.faq':'常見問題','faq.q1':'時程需要多久？','faq.a1':'依頁數與功能而定，常見為 2~4 週。電商或多語系另議。','faq.q2':'是否提供設計到上線的一條龍？','faq.a2':'可以，包含策略、設計、前端、網域、主機、GA/SEO 等設定。','faq.q3':'需要準備什麼？','faq.a3':'品牌素材、文案與參考網站。若無，我可協助整理與規劃。',
             'sec.contact':'聯絡我／取得報價','contact.other':'其他聯絡方式','form.name.label':'你的稱呼','form.name.ph':'王小明','form.email.label':'Email','form.email.ph':'you@example.com','form.budget.label':'預算區間（可估）','form.budget.opt0':'請選擇','form.budget.opt1':'NT$ 3k 起','form.budget.opt2':'NT$ 8k 起','form.budget.opt3':'NT$ 15k 起','form.timeline.label':'希望時程','form.timeline.opt1':'2 週內','form.timeline.opt2':'1 個月內','form.timeline.opt3':'彈性','form.msg.label':'專案描述','form.msg.ph':'簡述目標、頁數、功能、參考網站等…','form.help':'送出後我會在 1～2 個工作天內回覆。','form.submit':'送出需求','ui.backTop':'回到頂部','form.required':'請完整填寫必填欄位','form.received':'已收到表單，謝謝！我會在 1～2 個工作天內回覆。'},
+            'clients.business':'企業案例','clients.personal':'個人介紹案例',
+            'sec.addons':'其他加值服務',
+            'sec.addons.lead':'可依需求自由加購、組合。','addons.cat1':'設計與功能類','addons.cat2':'行銷與數據分析類','addons.cat3':'系統與技術支援類','ad1.1':'多語系網站：提供語言切換功能','ad1.1.p':'+NT$3,000 / 語言','ad1.2':'深色 / 淺色雙模式切換（自動與手動）','ad1.2.p':'+NT$1,500','ad1.3':'品牌配色與客製主題設計','ad1.3.p':'NT$2,000+','ad1.4':'動畫與動態滾動效果','ad1.4.p':'NT$2,000+','ad1.5':'專屬圖示 / Icon 設計','ad1.5.p':'NT$1,000+','ad2.1':'Google Map / 商家整合','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube 社群整合','ad2.2.p':'NT$500+','ad3.1':'自訂網域設定 + SSL 憑證','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare 圖片托管設定','ad3.2.p':'NT$1,500+','ad3.3':'網站備份與版本保存機制（每月）','ad3.3.p':'+NT$500 / 月','addons.note':'加值服務將依實際需求調整，費用非固定。'
         en:{'hero.tag':'Customizable · Responsive · SEO-friendly','ui.menu':'Menu','hero.h1':'Launch a <strong>lean</strong>, <strong>high-quality</strong> website for your brand.',
             'hero.lead':'I build single-file HTML one-pagers and microsites: fast RWD, clean SEO/GA4, working forms, and lightweight commerce—built to ship quickly and stay easy to maintain.','cta.primary':'Start your project','cta.secondary':'View templates','nav.services':'Services','nav.work':'Template','nav.process':'Process','nav.about':'About','nav.pricing':'Pricing','nav.faq':'FAQ','nav.quote':'Get a quote','nav.contact':'Contact','stats.projects':'Projects delivered','stats.satisfaction':'Client satisfaction','stats.timeline':'Typical timeline','stats.timeline.value':'2–4 weeks',
             'sec.services':'Services','sec.services.lead':'End-to-end—strategy, design, front-end, and launch support.','svc.1.title':'Single-file landing page / microsite','svc.1.desc':'One HTML file—layout, RWD, micro-interactions. Ideal for launches and personal brands.','svc.2.title':'Portfolio & case grid','svc.2.desc':'Tap-through cards with subtle hover lift and outbound links.','svc.3.title':'Contact form (real submissions)','svc.3.desc':'Formspree or Google Forms—capture leads without a backend.','svc.4.title':'Performance tuning','svc.4.desc':'Lazyload, compressed images, preconnect. Proven Lighthouse scores and faster loads.','svc.5.title':'SEO & analytics','svc.5.desc':'Meta/OG/JSON-LD plus GA4 events—wired and ship-ready.','svc.6.title':'Lite commerce (external checkout)','svc.6.desc':'“Buy” buttons that go straight to Stripe/Shopify checkout.',
@@ -770,6 +901,9 @@
             'sec.stack':'Tech & tools','stack.1.title':'HTML5','stack.1.desc':'Semantic, accessible structure','stack.2.title':'CSS3','stack.2.desc':'Responsive layout & animation','stack.3.title':'JavaScript','stack.3.desc':'Snappy interactions & validation','stack.4.title':'Performance','stack.4.desc':'Lazyload, compression, preconnect','stack.5.title':'SEO / GA4','stack.5.desc':'Schema, meta, events','stack.6.title':'SVG & motion','stack.6.desc':'Crisp icons, subtle micro-interactions',
             'sec.faq':'FAQ','faq.q1':'How long does it take?','faq.a1':'Depends on scope; typically 2~4 weeks. Commerce or multi-language by discussion.','faq.q2':'Do you offer end-to-end service?','faq.a2':'Yes—strategy, design, front-end, domain/hosting, and GA/SEO setup.','faq.q3':'What should I prepare?','faq.a3':'Brand assets, copy, and reference sites. If you don’t have them, I can help curate and plan.',
             'sec.contact':'Contact / Get a quote','contact.other':'Other ways to reach me','form.name.label':'Your name','form.name.ph':'Jane Doe','form.email.label':'Email','form.email.ph':'you@example.com','form.budget.label':'Budget range (est.)','form.budget.opt0':'Please select','form.budget.opt1':'NT$ 3k+','form.budget.opt2':'NT$ 8k+','form.budget.opt3':'NT$ 15k+','form.timeline.label':'Desired timeline','form.timeline.opt1':'Within 2 weeks','form.timeline.opt2':'Within 1 month','form.timeline.opt3':'Flexible','form.msg.label':'Project brief','form.msg.ph':'Goals, pages, features, reference sites…','form.help':"Got it—I'll reply within 1–2 business days.",'form.submit':'Send request','ui.backTop':'Back to Top','form.required':'Please complete the required fields.','form.received':"Got it! I'll get back to you within 1–2 business days."}
+            'clients.business':'Business cases','clients.personal':'Personal profile cases',
+            'sec.addons':'Add-on Services',
+            'sec.addons.lead':'Optional upgrades you can mix and match.','addons.cat1':'Design & Features','addons.cat2':'Marketing & Analytics','addons.cat3':'Systems & Technical Support','ad1.1':'Multi-language site with language switcher','ad1.1.p':'+NT$3,000 / language','ad1.2':'Light/Dark mode (auto & manual toggle)','ad1.2.p':'+NT$1,500','ad1.3':'Brand palette & custom theme','ad1.3.p':'NT$2,000+','ad1.4':'Animations & scroll effects','ad1.4.p':'NT$2,000+','ad1.5':'Custom icon set','ad1.5.p':'NT$1,000+','ad2.1':'Google Map / Business embed','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube integration','ad2.2.p':'NT$500+','ad3.1':'Custom domain + SSL setup','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare image hosting setup','ad3.2.p':'NT$1,500+','ad3.3':'Site backup & versioning (monthly)','ad3.3.p':'+NT$500 / month','addons.note':'Prices are adjusted by actual scope; not fixed list prices.'
       };
       function setMeta(lang){const m=META[lang];if(!m)return;document.title=m.title;const md=document.querySelector('meta[name="description"]');md&&md.setAttribute('content',m.desc);const ogt=document.querySelector('meta[property="og:title"]');ogt&&ogt.setAttribute('content',m.ogTitle);const ogd=document.querySelector('meta[property="og:description"]');ogd&&ogd.setAttribute('content',m.ogDesc);const twt=document.querySelector('meta[name="twitter:title"]');twt&&twt.setAttribute('content',m.ogTitle);const twd=document.querySelector('meta[name="twitter:description"]');twd&&twd.setAttribute('content',m.ogDesc)}
       function applySelectors(lang){const pack=STRINGS[lang];if(!pack)return;SELECTOR_MAP.forEach(({sel,key,type,attr})=>{const el=document.querySelector(sel);if(!el)return;const val=pack[key];if(val==null)return;if(type==='html')el.innerHTML=val;else if(type==='attr')el.setAttribute(attr||'aria-label',val);else el.textContent=val})}
