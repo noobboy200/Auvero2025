@@ -31,8 +31,15 @@
   
   <!-- ===== Preconnect ===== -->
   <link rel="preconnect" href="https://assets-dg0.pages.dev" crossorigin/>
-  <link rel="preconnect" href="https://dummyimage.com" crossorigin/>
   <link rel="canonical" href="https://auvero2025.pages.dev/">
+  <!-- INSERT: Preload hero LCP image -->
+  <link rel="preload" as="image"
+    href="images/aurevo_hero_v1-800.avif"
+    imagesrcset="
+      images/aurevo_hero_v1-480.avif 480w,
+      images/aurevo_hero_v1-800.avif 800w,
+      images/aurevo_hero_v1-1200.avif 1200w"
+    imagesizes="(max-width: 980px) 92vw, 55vw">
 
   <!-- ===== 全站樣式（緊湊化 + 清楚區塊標註）===== -->
   <style>
@@ -91,7 +98,7 @@
 
     /* ==== Mobile 右側迷你抽屜（REPLACE START）==== */
     @media (max-width:880px){
-      header{position:fixed;top:0;left:0;width:100%;z-index:3000;background:color-mix(in oklab,var(--bg) 92%,transparent);backdrop-filter:saturate(150%) blur(8px);-webkit-backdrop-filter:saturate(150%) blur(8px)}
+      header{position:fixed;top:0;left:0;width:100%;z-index:3000;background:color-mix(in oklab,var(--bg) 92%,transparent);backdrop-filter:none;-webkit-backdrop-filter:none;}
       .menu{display:inline-flex;z-index:3100}
       .menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s;z-index:2900}
       .menu-overlay.show{opacity:1;visibility:visible;transition:opacity .25s}
@@ -250,6 +257,10 @@
 
     /* ==== 小動畫 ==== */
     @keyframes menu-pop{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}
+
+    /* 延後首屏以外區塊的排版/繪製（Chrome/Edge 有效；Safari 無害） */
+    section:not(.hero){ content-visibility:auto; contain-intrinsic-size:1px 800px; }
+
   </style>
 
   <!-- ===== JSON-LD ===== -->
@@ -272,14 +283,7 @@
     }
   }
   </script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW45DN2QZE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ZW45DN2QZE');
-</script>
+
 </head>
 <body>
   <a class="skip" href="#main">跳到主內容</a>
@@ -325,11 +329,30 @@
             <div class="stat"><strong style="font-size:1.4rem">2~4 週</strong><span class="muted">一般交付</span></div>
           </div>
         </div>
-          <!-- REPLACE START: hero 圖改為 <img> 以提升 LCP -->
-            <figure class="hero-visual card reveal">
-            <img src="images/aurevo_hero_v1.png" alt="Aurevo 服務示意圖" width="1200" height="900" decoding="async" fetchpriority="high" />
-            </figure>
-          <!-- REPLACE END -->
+        <!-- REPLACE START: hero 圖片（響應式 AVIF/WebP + 尺寸） -->
+        <figure class="hero-visual card reveal">
+          <picture>
+            <source type="image/avif"
+              srcset="
+                images/aurevo_hero_v1-480.avif 480w,
+                images/aurevo_hero_v1-800.avif 800w,
+                images/aurevo_hero_v1-1200.avif 1200w"
+              sizes="(max-width: 980px) 92vw, 55vw">
+            <source type="image/webp"
+              srcset="
+                images/aurevo_hero_v1-480.webp 480w,
+                images/aurevo_hero_v1-800.webp 800w,
+                images/aurevo_hero_v1-1200.webp 1200w"
+              sizes="(max-width: 980px) 92vw, 55vw">
+            <img
+              src="images/aurevo_hero_v1-1200.avif"
+              alt="Aurevo 服務示意圖"
+              width="1200" height="900"
+              decoding="async" fetchpriority="high"
+              loading="eager" />
+          </picture>
+        </figure>
+        <!-- REPLACE END -->
       </div>
 
       <div class="container" style="margin-top:24px">
@@ -739,17 +762,32 @@
     /* ==== 平滑錨點（使用 scroll-padding-top 校正）==== */
     $$('#nav a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const id=a.getAttribute('href').slice(1);const el=document.getElementById(id);if(!el)return;nav.classList.remove('open');menuBtn?.setAttribute('aria-expanded','false');document.body.style.overflow='';el.scrollIntoView({behavior:'smooth',block:'start'})})});
 
-    /* ==== Slider（行動裝置安全）==== */
-    const slidesEl=$('#slides');const dots=$$('.dot');let idx=0,timer=null;
-    function go(i){if(!slidesEl||!dots.length)return;idx=(i+dots.length)%dots.length;slidesEl.style.transform=`translate3d(-${idx*100}%,0,0)`;dots.forEach((d,j)=>d.classList.toggle('active',j===idx))}
-    function auto(){clearInterval(timer);timer=setInterval(()=>go(idx+1),5000)}
-    dots.forEach((d,i)=>d.addEventListener('click',()=>{go(i);auto()}));
-    function normalizeSliderHeight(){if(!slidesEl)return;const slides=$$('.slide',slidesEl);const h=Math.max(...slides.map(s=>s.getBoundingClientRect().height));slidesEl.parentElement.style.minHeight=Math.ceil(h)+'px'}
-    window.addEventListener('resize',normalizeSliderHeight,{passive:true});
-    if(window.ResizeObserver){new ResizeObserver(normalizeSliderHeight).observe(slidesEl)}
-    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(normalizeSliderHeight)}
-    ;(function attachSwipe(el){if(!el)return;let startX=0,dx=0,drag=false;const onStart=e=>{drag=true;startX=(e.touches?e.touches[0].clientX:e.clientX);dx=0;clearInterval(timer);el.style.transition='none'};const onMove=e=>{if(!drag)return;const x=(e.touches?e.touches[0].clientX:e.clientX);dx=x-startX;const w=el.getBoundingClientRect().width;const offsetPct=(-idx*100)+(dx/w)*100;el.style.transform=`translate3d(${offsetPct}%,0,0)`};const onEnd=()=>{if(!drag)return;drag=false;el.style.transition='transform .45s ease';const w=el.getBoundingClientRect().width;if(Math.abs(dx)>w*0.25){go(idx+(dx<0?1:-1))}else{go(idx)}auto()};el.addEventListener('pointerdown',onStart);el.addEventListener('pointermove',onMove);el.addEventListener('pointerup',onEnd);el.addEventListener('pointercancel',onEnd);el.addEventListener('touchstart',onStart,{passive:true});el.addEventListener('touchmove',onMove,{passive:true});el.addEventListener('touchend',onEnd,{passive:true})})(slidesEl);
-    if(slidesEl&&dots.length){go(0);auto();normalizeSliderHeight()}
+// REPLACE START: testimonials 懶初始化
+function initTestimonials() {
+  const slidesEl = $('#slides'); const dots = $$('.dot');
+  if (!slidesEl || !dots.length) return;
+  let idx = 0, timer = null;
+  function go(i){ idx=(i+dots.length)%dots.length; slidesEl.style.transform=`translate3d(-${idx*100}%,0,0)`; dots.forEach((d,j)=>d.classList.toggle('active',j===idx)); }
+  function auto(){ clearInterval(timer); timer=setInterval(()=>go(idx+1),5000); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{go(i);auto()}));
+  function normalizeSliderHeight(){ const slides=$$('.slide',slidesEl); const h=Math.max(...slides.map(s=>s.getBoundingClientRect().height)); slidesEl.parentElement.style.minHeight=Math.ceil(h)+'px'; }
+  window.addEventListener('resize',normalizeSliderHeight,{passive:true});
+  if (window.ResizeObserver){ new ResizeObserver(normalizeSliderHeight).observe(slidesEl); }
+  if (document.fonts && document.fonts.ready){ document.fonts.ready.then(normalizeSliderHeight); }
+  ;(function attachSwipe(el){ /* 你的 swipe 程式碼原封不動貼這裡 */ })(slidesEl);
+  go(0); auto(); normalizeSliderHeight();
+}
+// 只有當 testimonials 進入視窗才初始化
+const tSec = document.getElementById('testimonials');
+if ('IntersectionObserver' in window && tSec) {
+  const io = new IntersectionObserver(es => {
+    if (es.some(e => e.isIntersecting)) { initTestimonials(); io.disconnect(); }
+  }, { rootMargin: '200px' });
+  io.observe(tSec);
+} else { // 後備：載入後 2s 再跑
+  window.addEventListener('load', () => setTimeout(initTestimonials, 2000));
+}
+// REPLACE END
 
     /* REPLACE START: 真實送出後顯示成功訊息（依 URL 參數） */
     const status = $('#form-status');
@@ -984,8 +1022,21 @@
       function setLang(lang){const L=(lang==='en')?'en':'zh';document.documentElement.setAttribute('lang',L==='en'?'en':'zh-Hant');localStorage.setItem('lang',L);setMeta(L);applySelectors(L);const btn=document.getElementById('langToggle');btn&&(btn.textContent=(L==='zh')?'EN':'中')}
       function getInitLang(){const q=new URL(location.href).searchParams.get('lang');if(q==='en'||q==='zh')return q;const saved=localStorage.getItem('lang');if(saved)return saved;const nav=(navigator.language||'').toLowerCase();return nav.startsWith('zh')?'zh':'en'}
       window.i18n={setLang,t:k=>STRINGS[(localStorage.getItem('lang')||getInitLang())][k]||k};
-      const init=getInitLang();
-      document.addEventListener('DOMContentLoaded',()=>{setLang(init);setupReveal();const btn=document.getElementById('langToggle');btn&&btn.addEventListener('click',()=>{const cur=localStorage.getItem('lang')||init;setLang(cur==='zh'?'en':'zh')})});
+      const init = getInitLang();
+      document.addEventListener('DOMContentLoaded', () => {
+        const reallyRun = () => { if (init !== 'zh') setLang(init); };
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(reallyRun, { timeout: 1500 });
+        } else {
+          setTimeout(reallyRun, 800);
+        }
+        setupReveal(); // 你原本的
+        const btn = document.getElementById('langToggle');
+        btn && btn.addEventListener('click', () => {
+          const cur = localStorage.getItem('lang') || init;
+          setLang(cur === 'zh' ? 'en' : 'zh');
+        });
+      });
     })();
 
     /* ==== 主題（亮/暗）==== */
@@ -999,5 +1050,23 @@
       btn&&btn.addEventListener('click',()=>{const cur=(html.getAttribute('data-theme')==='dark')?'dark':'light';setTheme(cur==='dark'?'light':'dark')});
     })();
   </script>
+  <!-- Lazy-load GA4: after load + idle -->
+<script>
+  window.addEventListener('load', () => {
+    (window.requestIdleCallback || function(cb){ setTimeout(cb, 2000); })(() => {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZW45DN2QZE';
+      s.onload = () => {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-ZW45DN2QZE');
+      };
+      document.head.appendChild(s);
+    });
+  });
+</script>
 </body>
 </html>
