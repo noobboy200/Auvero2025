@@ -32,16 +32,8 @@
   <!-- ===== Preconnect ===== -->
   <link rel="preconnect" href="https://assets-dg0.pages.dev" crossorigin/>
   <link rel="canonical" href="https://auvero2025.pages.dev/">
-  <!-- INSERT: Preload hero LCP image -->
-  <link rel="preload" as="image"
-    href="images/aurevo_hero_v1-800.avif"
-    imagesrcset="
-      images/aurevo_hero_v1-480.jpeg 480w,
-      images/aurevo_hero_v1-800.jpeg 800w,
-      images/aurevo_hero_v1-1200.jpeg 1200w"
-    imagesizes="(max-width: 980px) 92vw, 55vw">
+  <link rel="preload" as="image" href="images/aurevo_hero_v1.png">
 
-  <!-- ===== 全站樣式（緊湊化 + 清楚區塊標註）===== -->
   <style>
     /* ==== 基礎與色盤 ==== */
     html{scroll-behavior:smooth;scroll-padding-top:calc(var(--headerH,70px)+10px);transition:background-color .25s,color .25s;}
@@ -329,30 +321,13 @@
             <div class="stat"><strong style="font-size:1.4rem">2~4 週</strong><span class="muted">一般交付</span></div>
           </div>
         </div>
-        <!-- REPLACE START: hero 圖片（響應式 AVIF/WebP + 尺寸） -->
-        <figure class="hero-visual card reveal">
-          <picture>
-            <source type="image/avif"
-              srcset="
-                images/aurevo_hero_v1-480.avif 480w,
-                images/aurevo_hero_v1-800.avif 800w,
-                images/aurevo_hero_v1-1200.avif 1200w"
-              sizes="(max-width: 980px) 92vw, 55vw">
-            <source type="image/webp"
-              srcset="
-                images/aurevo_hero_v1-480.webp 480w,
-                images/aurevo_hero_v1-800.webp 800w,
-                images/aurevo_hero_v1-1200.webp 1200w"
-              sizes="(max-width: 980px) 92vw, 55vw">
-            <img
-              src="images/aurevo_hero_v1-1200.avif"
-              alt="Aurevo 服務示意圖"
-              width="1200" height="900"
-              decoding="async" fetchpriority="high"
-              loading="eager" />
-          </picture>
-        </figure>
-        <!-- REPLACE END -->
+      <figure class="hero-visual card reveal">
+        <img
+          src="images/aurevo_hero_v1.png"
+          alt="Aurevo 服務示意圖"
+          width="1200" height="900"
+          decoding="async" fetchpriority="high" loading="eager" />
+      </figure>
       </div>
 
       <div class="container" style="margin-top:24px">
