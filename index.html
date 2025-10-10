@@ -28,10 +28,11 @@
   <meta name="twitter:title" content="Aurevo｜網站設計師 · 單檔 HTML 網站、登陸頁、SEO 與效能優化"/>
   <meta name="twitter:description" content="單一 HTML 也能專業：RWD、SEO/GA4、表單整合、輕電商、效能最佳化。"/>
   <meta name="twitter:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%25' height='100%25' fill='%230a0a0a'/><text x='50%25' y='50%25' fill='%23ffffff' font-family='Arial' font-size='48' text-anchor='middle' dominant-baseline='middle'>Aurevo · Web Designer</text></svg>"/>
-
+  
   <!-- ===== Preconnect ===== -->
   <link rel="preconnect" href="https://assets-dg0.pages.dev" crossorigin/>
   <link rel="preconnect" href="https://dummyimage.com" crossorigin/>
+  <link rel="canonical" href="https://auvero2025.pages.dev/">
 
   <!-- ===== 全站樣式（緊湊化 + 清楚區塊標註）===== -->
   <style>
@@ -293,6 +294,7 @@
           <a href="#process">流程</a>
           <a href="#about">關於我</a>
           <a href="#pricing">方案</a>
+          <a href="#addons">加值服務</a>
           <a href="#faq">FAQ</a>
           <a href="#contact" class="btn">取得報價</a>
         </nav>
@@ -652,7 +654,8 @@
 
             <div class="form-row">
               <div><label for="name">你的稱呼</label><input id="name" name="name" placeholder="王小明" required/></div>
-              <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required/></div>
+              <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required
+                                                          autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"></div>
             </div>
             <div class="form-row">
               <div>
@@ -714,7 +717,7 @@
     const $=(s,sc=document)=>sc.querySelector(s), $$=(s,sc=document)=>Array.from(sc.querySelectorAll(s));
 
     /* ==== Sticky Header / Active Nav ==== */
-    const header=$('#site-header');const sections=['services','work','process','about','pricing','addons','faq','contact'].map(id=>({id,el:$('#'+id)}));
+    const header=$('#site-header');const sections=['services','work','process','about','pricing','addons','faq','contact'].map(id=>({id,el:$('#'+id)}));const navLinks=$$('#nav a');
     const onScroll=()=>{header.classList.toggle('scrolled',window.scrollY>10);const y=window.scrollY+120;for(const {id,el} of sections){if(!el)continue;const top=el.offsetTop,b=top+el.offsetHeight;const link=$(`#nav a[href="#${id}"]`);if(y>=top&&y<b){navLinks.forEach(a=>a.classList.remove('active'));link&&link.classList.add('active')}}$('#backTop').classList.toggle('show',window.scrollY>600)};
     window.addEventListener('scroll',onScroll,{passive:true});
 
@@ -724,7 +727,11 @@
       const close=()=>{nav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');document.body.style.overflow='';overlay&&overlay.classList.remove('show')};
       menuBtn.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menuBtn.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';overlay&&overlay.classList.toggle('show',open)});
       nav.addEventListener('click',e=>{if(e.target.tagName==='A') close()});
-      document.addEventListener('click',e=>{if(!nav.classList.contains('open'))return;const inside=nav.contains(e.target)||menuBtn.contains(e.target);if(!inside) close()},{passive:true});
+      document.addEventListener('click', e => {
+        if (!nav.classList.contains('open')) return;
+        const inside = nav.contains(e.target) || menuBtn.contains(e.target);
+        if (!inside) close();
+      });
       overlay&&overlay.addEventListener('click',close);
     }
     /* ==== Mobile Menu Drawer（REPLACE END）==== */
@@ -748,8 +755,9 @@
     const status = $('#form-status');
     const params = new URL(location.href).searchParams;
     if (params.get('sent') === '1' && status) {
-      status.textContent = i18n.t('form.received');
-      // 可選：自動捲到聯絡區塊頂端
+      const fallback = '已收到表單，謝謝！我會在 1～2 個工作天內回覆。';
+      const msg = (window.i18n && typeof i18n.t === 'function') ? i18n.t('form.received') : fallback;
+      status.textContent = msg;
       const contact = document.getElementById('contact');
       contact && contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -839,7 +847,8 @@
         {sel:'#contact label[for="msg"]',key:'form.msg.label',type:'text'},{sel:'#msg',key:'form.msg.ph',type:'attr',attr:'placeholder'},
         {sel:'#contact .help',key:'form.help',type:'text'},{sel:'#contact button[type="submit"]',key:'form.submit',type:'text'},
         {sel:'footer .tag[href="#work"]',key:'nav.work',type:'text'},{sel:'footer .tag[href="#pricing"]',key:'nav.pricing',type:'text'},{sel:'footer .tag[href="#contact"]',key:'nav.contact',type:'text'},
-        {sel:'#backTop',key:'ui.backTop',type:'attr',attr:'aria-label'}
+        {sel:'#backTop',key:'ui.backTop',type:'attr',attr:'aria-label'},
+        {sel:'#nav a[href="#addons"]', key:'nav.addons', type:'text'},
         { sel:'#clients .client-card:nth-of-type(1) .client-title', key:'clients.business', type:'text' },
         { sel:'#clients .client-card:nth-of-type(2) .client-title', key:'clients.personal', type:'text' },
 
@@ -875,36 +884,101 @@
 
         { sel:'#addons [data-i18n="addons.note"]', key:'addons.note', type:'text' },
       ];
-      const STRINGS={
-        zh:{'hero.tag':'可客製化 · RWD 響應式 · SEO 友善','ui.menu':'目錄','hero.h1':'為你的品牌，打造<strong>低成本</strong><strong>高品質</strong>的網站體驗。',
-            'hero.lead':'Aurevo 專做單檔 HTML 一頁式／小官網：RWD 響應式、SEO / GA4、表單整合、輕電商，速度快、好維護、成本小。','cta.primary':'立即洽談','cta.secondary':'查看模板','nav.services':'服務','nav.work':'模板','nav.process':'流程','nav.about':'關於我','nav.pricing':'方案','nav.faq':'FAQ','nav.quote':'取得報價','nav.contact':'聯絡','stats.projects':'完成專案','stats.satisfaction':'客戶滿意度','stats.timeline':'一般交付','stats.timeline.value':'2～4 週',
-            'sec.services':'服務項目','sec.services.lead':'從策略、設計到前端開發與上線顧問，提供一條龍服務。','svc.1.title':'單檔登陸頁 / 小官網','svc.1.desc':'只用一個 HTML 完成排版、RWD 與動效，適合活動／新產品／個人品牌。','svc.2.title':'單檔作品集與案例牆','svc.2.desc':'可點卡片、滑過微浮起、點擊直達外部網站或 Demo。','svc.3.title':'單檔聯絡表單（可真的送出）','svc.3.desc':'串 Formspree／Google 表單，無後端也能收件與通知。','svc.4.title':'單檔效能最佳化','svc.4.desc':'Lazyload、圖片壓縮、預連線，實測 Lighthouse 高分更好載入。','svc.5.title':'單檔 SEO / 追蹤','svc.5.desc':'Meta/OG/JSON-LD、GA4 追蹤碼與事件，設定一次即上線。','svc.6.title':'單檔輕電商（外部結帳）','svc.6.desc':'購買按鈕直連 Stripe／Shopify 結帳流程，快速開始收款。',
-            'sec.work':'模板','work.1.title':'專案 A','work.2.title':'專案 B','work.3.title':'專案 C','work.1.tag':'個人品牌','work.2.tag':'個人/團體作品集','work.3.tag':'商家品牌',
-            'sec.process':'合作流程','proc.1.title':'諮詢與需求彙整','proc.1.desc':'釐清目標、受眾、內容模組與素材來源，提供時程與預估。','proc.2.title':'版型挑選與結構規劃','proc.2.desc':'決定區塊（Hero／服務／作品／方案／FAQ／聯絡），規劃 RWD。','proc.3.title':'視覺風格與色彩套用','proc.3.desc':'套用品牌色，整理圖片、文案，確保一致性。','proc.4.title':'前端開發','proc.4.desc':'語意化標記、效能最佳化、SEO／追蹤碼與表單整合。','proc.5.title':'上線與驗收','proc.5.desc':'部署 Cloudflare／GitHub Pages，網址與 SSL 設定，測試完成。','proc.6.title':'維護與成長','proc.6.desc':'以月費持續微調內容、追蹤報表與轉換優化。（至少 6 個月）','sec.pricing':'價格方案',
-            'about.tag':'About · 關於我','about.title':'嗨，我是 Aurevo —— 一人工作室，專做單檔 HTML 小官網 / 登陸頁','about.lead':'我主打「快速上線、好維護」：語意化標記、效能與 SEO 打底、GA4 追蹤就緒，讓個人品牌與小型商家用最精實的成本取得專業網站。','about.p1':'<strong>端到端負責</strong>：從需求彙整、版型結構、設計到前端開發與上線，一個人掌握，溝通單一窗口、效率高。','about.p2':'<strong>輕量高效</strong>：單一檔案結構 + 圖片/資源最佳化，<span class="muted">更快啟動、更易長期維護</span>。','about.p3':'<strong>SEO / 追蹤落地</strong>：Meta/OG/JSON-LD 與 GA4 事件，<span class="muted">不是只漂亮，還能被找到</span>。','about.p4':'<strong>透明合作</strong>：流程、時程與費用公開；維護方案可選，<span class="muted">小步快跑、持續優化</span>。','about.btn1':'談談你的專案','about.btn2':'看模板/案例','about.desc':'常用堆疊：語意化 HTML、RWD、輕量動效、Lazyload、圖片壓縮、預連線、結構化資料、GA4 事件。擅長把「一頁式」做出<strong>清晰架構與轉換路徑</strong>。','about.region':'可遠端合作 · 服務區域：台灣 / 馬來西亞','about.btn3':'直接聯絡我',
-            'sec.pricing.lead':'一次到位的建置費，依需求彈性調整。','plan.1':'入門版','plan.2':'進階版','plan.3':'專業版','price.p1':'NT$3,000 起／RM400 起','price.p2':'NT$8,000 起／RM1,100 起','price.p3':'NT$15,000 起／RM2,300 起','p1.f1':'單頁 HTML（RWD 模板）','p1.f2':'首頁 + 作品/菜單 + 聯絡方式','p1.f3':'部署代上線','p2.f1':'半客製化排版（顏色 / 元件）','p2.f2':'SEO Meta / OG 標籤','p2.f3':'GA4 追蹤碼','p2.f4':'聯絡表單（Formspree / Google 表單）','p3.f1':'完全客製化設計','p3.f2':'互動動效','p3.f3':'效能最佳化（Lighthouse >90）','p3.f4':'自訂網域 + SSL','sec.maint':'維護方案','sec.maint.lead':'穩定運營、持續調整，專注在你的內容與行銷。','plan.m1':'基礎維護','plan.m2':'進階維護','plan.m3':'專業維護','price.m1':'NT$500 起／RM70 起／月','price.m2':'NT$1,300 起／RM180 起／月','price.m3':'NT$2,500 起／RM350 起／月','m1.f1':'網站代管（Cloudflare / GitHub Pages）','m1.f2':'每月 1 次小修改（文字 / 圖片）','m1.f3':'SSL 維護','m2.f1':'含基礎維護','m2.f2':'每月最多 3 次小修改','m2.f3':'GA4 / Search Console 簡易報告','m2.f4':'基礎 SEO','m3.f1':'含進階維護','m3.f2':'不限次數修改','m3.f3':'季度 SEO 報告與建議','m3.f4':'效能檢測','maint.note':'若需維護服務，至少需簽訂 6 個月方案',
-            'sec.testimonials':'客戶推薦','ts.1.txt':'「一頁式個人品牌網站把作品、服務與聯絡一次講清楚，來訊集中不少，合作洽詢更好管理。」','ts.1.who':'— 個人品牌主／自由接案者','ts.2.txt':'「家長用手機就能完成報名與諮詢，這學期招生效率超過預期，老師也省下整理表單的時間。」','ts.2.who':'— 某國中小補習班 負責人','ts.3.txt':'「菜單與聯絡方式很清楚、網站速度快，Google 搜尋也找得到，電話與到店諮詢都變多了。」','ts.3.who':'— 社區咖啡店 店主',
-            'sec.stack':'技術與工具','stack.1.title':'HTML5','stack.1.desc':'語意化／結構化','stack.2.title':'CSS3','stack.2.desc':'RWD／Grid／動畫','stack.3.title':'JavaScript','stack.3.desc':'互動效果／表單驗證','stack.4.title':'效能最佳化','stack.4.desc':'Lazyload／圖片壓縮／預連線','stack.5.title':'SEO / GA4','stack.5.desc':'標籤／追蹤碼／事件','stack.6.title':'SVG & 動態效果','stack.6.desc':'客製圖示／輕量動效',
-            'sec.faq':'常見問題','faq.q1':'時程需要多久？','faq.a1':'依頁數與功能而定，常見為 2~4 週。電商或多語系另議。','faq.q2':'是否提供設計到上線的一條龍？','faq.a2':'可以，包含策略、設計、前端、網域、主機、GA/SEO 等設定。','faq.q3':'需要準備什麼？','faq.a3':'品牌素材、文案與參考網站。若無，我可協助整理與規劃。',
-            'sec.contact':'聯絡我／取得報價','contact.other':'其他聯絡方式','form.name.label':'你的稱呼','form.name.ph':'王小明','form.email.label':'Email','form.email.ph':'you@example.com','form.budget.label':'預算區間（可估）','form.budget.opt0':'請選擇','form.budget.opt1':'NT$ 3k 起','form.budget.opt2':'NT$ 8k 起','form.budget.opt3':'NT$ 15k 起','form.timeline.label':'希望時程','form.timeline.opt1':'2 週內','form.timeline.opt2':'1 個月內','form.timeline.opt3':'彈性','form.msg.label':'專案描述','form.msg.ph':'簡述目標、頁數、功能、參考網站等…','form.help':'送出後我會在 1～2 個工作天內回覆。','form.submit':'送出需求','ui.backTop':'回到頂部','form.required':'請完整填寫必填欄位','form.received':'已收到表單，謝謝！我會在 1～2 個工作天內回覆。'},
-            'clients.business':'企業案例','clients.personal':'個人介紹案例',
-            'sec.addons':'其他加值服務',
-            'sec.addons.lead':'可依需求自由加購、組合。','addons.cat1':'設計與功能類','addons.cat2':'行銷與數據分析類','addons.cat3':'系統與技術支援類','ad1.1':'多語系網站：提供語言切換功能','ad1.1.p':'+NT$3,000 / 語言','ad1.2':'深色 / 淺色雙模式切換（自動與手動）','ad1.2.p':'+NT$1,500','ad1.3':'品牌配色與客製主題設計','ad1.3.p':'NT$2,000+','ad1.4':'動畫與動態滾動效果','ad1.4.p':'NT$2,000+','ad1.5':'專屬圖示 / Icon 設計','ad1.5.p':'NT$1,000+','ad2.1':'Google Map / 商家整合','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube 社群整合','ad2.2.p':'NT$500+','ad3.1':'自訂網域設定 + SSL 憑證','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare 圖片托管設定','ad3.2.p':'NT$1,500+','ad3.3':'網站備份與版本保存機制（每月）','ad3.3.p':'+NT$500 / 月','addons.note':'加值服務將依實際需求調整，費用非固定。'
-        en:{'hero.tag':'Customizable · Responsive · SEO-friendly','ui.menu':'Menu','hero.h1':'Launch a <strong>lean</strong>, <strong>high-quality</strong> website for your brand.',
-            'hero.lead':'I build single-file HTML one-pagers and microsites: fast RWD, clean SEO/GA4, working forms, and lightweight commerce—built to ship quickly and stay easy to maintain.','cta.primary':'Start your project','cta.secondary':'View templates','nav.services':'Services','nav.work':'Template','nav.process':'Process','nav.about':'About','nav.pricing':'Pricing','nav.faq':'FAQ','nav.quote':'Get a quote','nav.contact':'Contact','stats.projects':'Projects delivered','stats.satisfaction':'Client satisfaction','stats.timeline':'Typical timeline','stats.timeline.value':'2–4 weeks',
-            'sec.services':'Services','sec.services.lead':'End-to-end—strategy, design, front-end, and launch support.','svc.1.title':'Single-file landing page / microsite','svc.1.desc':'One HTML file—layout, RWD, micro-interactions. Ideal for launches and personal brands.','svc.2.title':'Portfolio & case grid','svc.2.desc':'Tap-through cards with subtle hover lift and outbound links.','svc.3.title':'Contact form (real submissions)','svc.3.desc':'Formspree or Google Forms—capture leads without a backend.','svc.4.title':'Performance tuning','svc.4.desc':'Lazyload, compressed images, preconnect. Proven Lighthouse scores and faster loads.','svc.5.title':'SEO & analytics','svc.5.desc':'Meta/OG/JSON-LD plus GA4 events—wired and ship-ready.','svc.6.title':'Lite commerce (external checkout)','svc.6.desc':'“Buy” buttons that go straight to Stripe/Shopify checkout.',
-            'sec.work':'Template','work.1.title':'Project A','work.2.title':'Project B','work.3.title':'Project C','work.1.tag':'Personal Brand','work.2.tag':'Personal / Team Collection','work.3.tag':'Merchant Brand',
-            'sec.process':'Process','proc.1.title':'Discovery & scoping','proc.1.desc':'Clarify goals, audience, modules, assets, and provide timeline & estimate.','proc.2.title':'Template & structure','proc.2.desc':'Choose sections (hero/services/work/pricing/FAQ/contact) and plan RWD.','proc.3.title':'Visual & colors','proc.3.desc':'Apply brand colors, curate images and copy for consistency.','proc.4.title':'Front-end development','proc.4.desc':'Semantic markup, performance, SEO/analytics, and form integrations.','proc.5.title':'Launch & QA','proc.5.desc':'Deploy to Cloudflare/GitHub Pages, set domain & SSL, and test thoroughly.','proc.6.title':'Maintenance & growth','proc.6.desc':'Monthly refinements, reporting, and conversion tuning. (6-month minimum)','sec.pricing':'Pricing',
-            'about.tag':'About Me','about.title':'Hi, I’m Aurevo — a solo web designer specialized in single-file HTML landing pages and mini sites.','about.lead':'I focus on fast launch and easy maintenance: semantic markup, performance & SEO foundation, GA4 ready — helping small brands get professional websites efficiently.','about.p1':'<strong>End-to-end workflow</strong>: from planning, design, and frontend development to deployment — single point of contact, fast communication.','about.p2':'<strong>Lightweight & Efficient</strong>: single-file structure with optimized images/resources, <span class="muted">faster loading and easier long-term upkeep</span>.','about.p3':'<strong>SEO / Tracking Ready</strong>: Meta, OG, JSON-LD, GA4 events — <span class="muted">built to be found, not just look good</span>.','about.p4':'<strong>Transparent Collaboration</strong>: clear process, timeline and pricing, <span class="muted">iterate quickly, grow sustainably</span>.','about.btn1':'Let’s Talk','about.btn2':'View Templates','about.desc':'Common stack: semantic HTML, RWD, lightweight motion, lazyload, compression, preconnect, structured data, GA4. Turning simple one-pagers into <strong>clear, conversion-driven websites</strong>.','about.region':'Remote collaboration · Service areas: Taiwan / Malaysia','about.btn3':'Contact Me',
-            'sec.pricing.lead':'One-time build fee, adjustable by scope.','plan.1':'Starter','plan.2':'Growth','plan.3':'Pro','price.p1':'From NT$3,000 / RM400 (one-time)','price.p2':'From NT$8,000 / RM1,100 (one-time)','price.p3':'From NT$15,000 / RM2,300 (one-time)','p1.f1':'Single-page HTML (RWD template)','p1.f2':'Home + work/menu + contact','p1.f3':'Deployment & launch included','p2.f1':'Semi-custom layout (colors / components)','p2.f2':'SEO meta / OG tags','p2.f3':'GA4 tracking','p2.f4':'Contact form (Formspree / Google Forms)','p3.f1':'Fully custom design','p3.f2':'Interactive motion','p3.f3':'Performance tuning (Lighthouse >90)','p3.f4':'Custom domain + SSL','sec.maint':'Maintenance plans','sec.maint.lead':'Stay stable, keep improving—and focus on your content and marketing.','plan.m1':'Basic maintenance','plan.m2':'Advanced maintenance','plan.m3':'Pro maintenance','price.m1':'From NT$500 / RM70 per month','price.m2':'From NT$1,300 / RM180 per month','price.m3':'From NT$2,500 / RM350 per month','m1.f1':'Site hosting (Cloudflare / GitHub Pages)','m1.f2':'1 minor change/month (copy / image)','m1.f3':'SSL upkeep','m2.f1':'Includes Basic','m2.f2':'Up to 3 minor changes/month','m2.f3':'GA4 / Search Console snapshot','m2.f4':'Baseline SEO','m3.f1':'Includes Advanced','m3.f2':'Unlimited edits','m3.f3':'Quarterly SEO report & recs','m3.f4':'Performance audits','maint.note':'Maintenance requires a minimum 6-month commitment.',
-            'sec.testimonials':'Testimonials','ts.1.txt':'“My personal-brand one-pager explains work, services, and contact in one place. Inquiries are more focused and easier to manage.”','ts.1.who':'— Solo Creator / Freelancer','ts.2.txt':'“Parents register smoothly on mobile; enrollment exceeded expectations this term, and teachers spend less time on admin.”','ts.2.who':'— Owner, Tutoring Center','ts.3.txt':'“Clear menu and contact, fast site, and visible on Google—calls and walk-in inquiries both went up.”','ts.3.who':'— Owner, Neighborhood Café',
-            'sec.stack':'Tech & tools','stack.1.title':'HTML5','stack.1.desc':'Semantic, accessible structure','stack.2.title':'CSS3','stack.2.desc':'Responsive layout & animation','stack.3.title':'JavaScript','stack.3.desc':'Snappy interactions & validation','stack.4.title':'Performance','stack.4.desc':'Lazyload, compression, preconnect','stack.5.title':'SEO / GA4','stack.5.desc':'Schema, meta, events','stack.6.title':'SVG & motion','stack.6.desc':'Crisp icons, subtle micro-interactions',
-            'sec.faq':'FAQ','faq.q1':'How long does it take?','faq.a1':'Depends on scope; typically 2~4 weeks. Commerce or multi-language by discussion.','faq.q2':'Do you offer end-to-end service?','faq.a2':'Yes—strategy, design, front-end, domain/hosting, and GA/SEO setup.','faq.q3':'What should I prepare?','faq.a3':'Brand assets, copy, and reference sites. If you don’t have them, I can help curate and plan.',
-            'sec.contact':'Contact / Get a quote','contact.other':'Other ways to reach me','form.name.label':'Your name','form.name.ph':'Jane Doe','form.email.label':'Email','form.email.ph':'you@example.com','form.budget.label':'Budget range (est.)','form.budget.opt0':'Please select','form.budget.opt1':'NT$ 3k+','form.budget.opt2':'NT$ 8k+','form.budget.opt3':'NT$ 15k+','form.timeline.label':'Desired timeline','form.timeline.opt1':'Within 2 weeks','form.timeline.opt2':'Within 1 month','form.timeline.opt3':'Flexible','form.msg.label':'Project brief','form.msg.ph':'Goals, pages, features, reference sites…','form.help':"Got it—I'll reply within 1–2 business days.",'form.submit':'Send request','ui.backTop':'Back to Top','form.required':'Please complete the required fields.','form.received':"Got it! I'll get back to you within 1–2 business days."}
-            'clients.business':'Business cases','clients.personal':'Personal profile cases',
-            'sec.addons':'Add-on Services',
-            'sec.addons.lead':'Optional upgrades you can mix and match.','addons.cat1':'Design & Features','addons.cat2':'Marketing & Analytics','addons.cat3':'Systems & Technical Support','ad1.1':'Multi-language site with language switcher','ad1.1.p':'+NT$3,000 / language','ad1.2':'Light/Dark mode (auto & manual toggle)','ad1.2.p':'+NT$1,500','ad1.3':'Brand palette & custom theme','ad1.3.p':'NT$2,000+','ad1.4':'Animations & scroll effects','ad1.4.p':'NT$2,000+','ad1.5':'Custom icon set','ad1.5.p':'NT$1,000+','ad2.1':'Google Map / Business embed','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube integration','ad2.2.p':'NT$500+','ad3.1':'Custom domain + SSL setup','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare image hosting setup','ad3.2.p':'NT$1,500+','ad3.3':'Site backup & versioning (monthly)','ad3.3.p':'+NT$500 / month','addons.note':'Prices are adjusted by actual scope; not fixed list prices.'
-      };
+      const STRINGS = {
+  zh: {
+    'hero.tag':'可客製化 · RWD 響應式 · SEO 友善','ui.menu':'目錄',
+    'hero.h1':'為你的品牌，打造<strong>低成本</strong><strong>高品質</strong>的網站體驗。',
+    'hero.lead':'Aurevo 專做單檔 HTML 一頁式／小官網：RWD 響應式、SEO / GA4、表單整合、輕電商，速度快、好維護、成本小。',
+    'cta.primary':'立即洽談','cta.secondary':'查看模板',
+    'nav.services':'服務','nav.work':'模板','nav.process':'流程','nav.about':'關於我','nav.pricing':'方案','nav.addons':'加值服務','nav.faq':'FAQ','nav.quote':'取得報價','nav.contact':'聯絡',
+    'stats.projects':'完成專案','stats.satisfaction':'客戶滿意度','stats.timeline':'一般交付','stats.timeline.value':'2～4 週',
+    'sec.services':'服務項目','sec.services.lead':'從策略、設計到前端開發與上線顧問，提供一條龍服務。',
+    'svc.1.title':'單檔登陸頁 / 小官網','svc.1.desc':'只用一個 HTML 完成排版、RWD 與動效，適合活動／新產品／個人品牌。',
+    'svc.2.title':'單檔作品集與案例牆','svc.2.desc':'可點卡片、滑過微浮起、點擊直達外部網站或 Demo。',
+    'svc.3.title':'單檔聯絡表單（可真的送出）','svc.3.desc':'串 Formspree／Google 表單，無後端也能收件與通知。',
+    'svc.4.title':'單檔效能最佳化','svc.4.desc':'Lazyload、圖片壓縮、預連線，實測 Lighthouse 高分更好載入。',
+    'svc.5.title':'單檔 SEO / 追蹤','svc.5.desc':'Meta/OG/JSON-LD、GA4 追蹤碼與事件，設定一次即上線。',
+    'svc.6.title':'單檔輕電商（外部結帳）','svc.6.desc':'購買按鈕直連 Stripe／Shopify 結帳流程，快速開始收款。',
+    'sec.work':'模板','work.1.title':'專案 A','work.2.title':'專案 B','work.3.title':'專案 C','work.1.tag':'個人品牌','work.2.tag':'個人/團體作品集','work.3.tag':'商家品牌',
+    'sec.process':'合作流程','proc.1.title':'諮詢與需求彙整','proc.1.desc':'釐清目標、受眾、內容模組與素材來源，提供時程與預估。','proc.2.title':'版型挑選與結構規劃','proc.2.desc':'決定區塊（Hero／服務／作品／方案／FAQ／聯絡），規劃 RWD。','proc.3.title':'視覺風格與色彩套用','proc.3.desc':'套用品牌色，整理圖片、文案，確保一致性。','proc.4.title':'前端開發','proc.4.desc':'語意化標記、效能最佳化、SEO／追蹤碼與表單整合。','proc.5.title':'上線與驗收','proc.5.desc':'部署 Cloudflare／GitHub Pages，網址與 SSL 設定，測試完成。','proc.6.title':'維護與成長','proc.6.desc':'以月費持續微調內容、追蹤報表與轉換優化。（至少 6 個月）',
+    'about.tag':'About · 關於我','about.title':'嗨，我是 Aurevo —— 一人工作室，專做單檔 HTML 小官網 / 登陸頁','about.lead':'我主打「快速上線、好維護」：語意化標記、效能與 SEO 打底、GA4 追蹤就緒，讓個人品牌與小型商家用最精實的成本取得專業網站。','about.p1':'<strong>端到端負責</strong>：從需求彙整、版型結構、設計到前端開發與上線，一個人掌握，溝通單一窗口、效率高。','about.p2':'<strong>輕量高效</strong>：單一檔案結構 + 圖片/資源最佳化，<span class="muted">更快啟動、更易長期維護</span>。','about.p3':'<strong>SEO / 追蹤落地</strong>：Meta/OG/JSON-LD 與 GA4 事件，<span class="muted">不是只漂亮，還能被找到</span>。','about.p4':'<strong>透明合作</strong>：流程、時程與費用公開；維護方案可選，<span class="muted">小步快跑、持續優化</span>。','about.btn1':'談談你的專案','about.btn2':'看模板/案例','about.desc':'常用堆疊：語意化 HTML、RWD、輕量動效、Lazyload、圖片壓縮、預連線、結構化資料、GA4 事件。擅長把「一頁式」做出<strong>清晰架構與轉換路徑</strong>。','about.region':'可遠端合作 · 服務區域：台灣 / 馬來西亞','about.btn3':'直接聯絡我',
+    'sec.pricing':'價格方案','sec.pricing.lead':'一次到位的建置費，依需求彈性調整。',
+    'plan.1':'入門版','plan.2':'進階版','plan.3':'專業版',
+    'price.p1':'NT$3,000 起／RM400 起','price.p2':'NT$8,000 起／RM1,100 起','price.p3':'NT$15,000 起／RM2,300 起',
+    'p1.f1':'單頁 HTML（RWD 模板）','p1.f2':'首頁 + 作品/菜單 + 聯絡方式','p1.f3':'部署代上線',
+    'p2.f1':'半客製化排版（顏色 / 元件）','p2.f2':'SEO Meta / OG 標籤','p2.f3':'GA4 追蹤碼','p2.f4':'聯絡表單（Formspree / Google 表單）',
+    'p3.f1':'完全客製化設計','p3.f2':'互動動效','p3.f3':'效能最佳化（Lighthouse >90）','p3.f4':'自訂網域 + SSL',
+    'sec.maint':'維護方案','sec.maint.lead':'穩定運營、持續調整，專注在你的內容與行銷。',
+    'plan.m1':'基礎維護','plan.m2':'進階維護','plan.m3':'專業維護',
+    'price.m1':'NT$500 起／RM70 起／月','price.m2':'NT$1,300 起／RM180 起／月','price.m3':'NT$2,500 起／RM350 起／月',
+    'm1.f1':'網站代管（Cloudflare / GitHub Pages）','m1.f2':'每月 1 次小修改（文字 / 圖片）','m1.f3':'SSL 維護',
+    'm2.f1':'含基礎維護','m2.f2':'每月最多 3 次小修改','m2.f3':'GA4 / Search Console 簡易報告','m2.f4':'基礎 SEO',
+    'm3.f1':'含進階維護','m3.f2':'不限次數修改','m3.f3':'季度 SEO 報告與建議','m3.f4':'效能檢測',
+    'maint.note':'若需維護服務，至少需簽訂 6 個月方案',
+    'sec.testimonials':'客戶推薦','ts.1.txt':'「一頁式個人品牌網站把作品、服務與聯絡一次講清楚，來訊集中不少，合作洽詢更好管理。」','ts.1.who':'— 個人品牌主／自由接案者','ts.2.txt':'「家長用手機就能完成報名與諮詢，這學期招生效率超過預期，老師也省下整理表單的時間。」','ts.2.who':'— 某國中小補習班 負責人','ts.3.txt':'「菜單與聯絡方式很清楚、網站速度快，Google 搜尋也找得到，電話與到店諮詢都變多了。」','ts.3.who':'— 社區咖啡店 店主',
+    'sec.stack':'技術與工具','stack.1.title':'HTML5','stack.1.desc':'語意化／結構化','stack.2.title':'CSS3','stack.2.desc':'RWD／Grid／動畫','stack.3.title':'JavaScript','stack.3.desc':'互動效果／表單驗證','stack.4.title':'效能最佳化','stack.4.desc':'Lazyload／圖片壓縮／預連線','stack.5.title':'SEO / GA4','stack.5.desc':'標籤／追蹤碼／事件','stack.6.title':'SVG & 動態效果','stack.6.desc':'客製圖示／輕量動效',
+    'sec.faq':'常見問題','faq.q1':'時程需要多久？','faq.a1':'依頁數與功能而定，常見為 2~4 週。電商或多語系另議。','faq.q2':'是否提供設計到上線的一條龍？','faq.a2':'可以，包含策略、設計、前端、網域、主機、GA/SEO 等設定。','faq.q3':'需要準備什麼？','faq.a3':'品牌素材、文案與參考網站。若無，我可協助整理與規劃。',
+    'sec.contact':'聯絡我／取得報價','contact.other':'其他聯絡方式',
+    'form.name.label':'你的稱呼','form.name.ph':'王小明','form.email.label':'Email','form.email.ph':'you@example.com',
+    'form.budget.label':'預算區間（可估）','form.budget.opt0':'請選擇','form.budget.opt1':'NT$ 3k 起','form.budget.opt2':'NT$ 8k 起','form.budget.opt3':'NT$ 15k 起',
+    'form.timeline.label':'希望時程','form.timeline.opt1':'2 週內','form.timeline.opt2':'1 個月內','form.timeline.opt3':'彈性',
+    'form.msg.label':'專案描述','form.msg.ph':'簡述目標、頁數、功能、參考網站等…',
+    'form.help':'送出後我會在 1～2 個工作天內回覆。','form.submit':'送出需求','ui.backTop':'回到頂部','form.required':'請完整填寫必填欄位','form.received':'已收到表單，謝謝！我會在 1～2 個工作天內回覆。',
+    'clients.business':'企業案例','clients.personal':'個人介紹案例',
+    'sec.addons':'其他加值服務','sec.addons.lead':'可依需求自由加購、組合。',
+    'addons.cat1':'設計與功能類','addons.cat2':'行銷與數據分析類','addons.cat3':'系統與技術支援類',
+    'ad1.1':'多語系網站：提供語言切換功能','ad1.1.p':'+NT$3,000 / 語言','ad1.2':'深色 / 淺色雙模式切換（自動與手動）','ad1.2.p':'+NT$1,500','ad1.3':'品牌配色與客製主題設計','ad1.3.p':'NT$2,000+','ad1.4':'動畫與動態滾動效果','ad1.4.p':'NT$2,000+','ad1.5':'專屬圖示 / Icon 設計','ad1.5.p':'NT$1,000+',
+    'ad2.1':'Google Map / 商家整合','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube 社群整合','ad2.2.p':'NT$500+',
+    'ad3.1':'自訂網域設定 + SSL 憑證','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare 圖片托管設定','ad3.2.p':'NT$1,500+','ad3.3':'網站備份與版本保存機制（每月）','ad3.3.p':'+NT$500 / 月'
+  },
+
+  en: {
+    'hero.tag':'Customizable · Responsive · SEO-friendly','ui.menu':'Menu',
+    'hero.h1':'Launch a <strong>lean</strong>, <strong>high-quality</strong> website for your brand.',
+    'hero.lead':'I build single-file HTML one-pagers and microsites: fast RWD, clean SEO/GA4, working forms, and lightweight commerce—built to ship quickly and stay easy to maintain.',
+    'cta.primary':'Start your project','cta.secondary':'View templates',
+    'nav.services':'Services','nav.work':'Template','nav.process':'Process','nav.about':'About','nav.pricing':'Pricing','nav.addons':'Add-ons','nav.faq':'FAQ','nav.quote':'Get a quote','nav.contact':'Contact',
+    'stats.projects':'Projects delivered','stats.satisfaction':'Client satisfaction','stats.timeline':'Typical timeline','stats.timeline.value':'2–4 weeks',
+    'sec.services':'Services','sec.services.lead':'End-to-end—strategy, design, front-end, and launch support.',
+    'svc.1.title':'Single-file landing page / microsite','svc.1.desc':'One HTML file—layout, RWD, micro-interactions. Ideal for launches and personal brands.',
+    'svc.2.title':'Portfolio & case grid','svc.2.desc':'Tap-through cards with subtle hover lift and outbound links.',
+    'svc.3.title':'Contact form (real submissions)','svc.3.desc':'Formspree or Google Forms—capture leads without a backend.',
+    'svc.4.title':'Performance tuning','svc.4.desc':'Lazyload, compressed images, preconnect. Proven Lighthouse scores and faster loads.',
+    'svc.5.title':'SEO & analytics','svc.5.desc':'Meta/OG/JSON-LD plus GA4 events—wired and ship-ready.',
+    'svc.6.title':'Lite commerce (external checkout)','svc.6.desc':'“Buy” buttons that go straight to Stripe/Shopify checkout.',
+    'sec.work':'Template','work.1.title':'Project A','work.2.title':'Project B','work.3.title':'Project C','work.1.tag':'Personal Brand','work.2.tag':'Personal / Team Collection','work.3.tag':'Merchant Brand',
+    'sec.process':'Process','proc.1.title':'Discovery & scoping','proc.1.desc':'Clarify goals, audience, modules, assets, and provide timeline & estimate.','proc.2.title':'Template & structure','proc.2.desc':'Choose sections (hero/services/work/pricing/FAQ/contact) and plan RWD.','proc.3.title':'Visual & colors','proc.3.desc':'Apply brand colors, curate images and copy for consistency.','proc.4.title':'Front-end development','proc.4.desc':'Semantic markup, performance, SEO/analytics, and form integrations.','proc.5.title':'Launch & QA','proc.5.desc':'Deploy to Cloudflare/GitHub Pages, set domain & SSL, and test thoroughly.','proc.6.title':'Maintenance & growth','proc.6.desc':'Monthly refinements, reporting, and conversion tuning. (6-month minimum)',
+    'about.tag':'About Me','about.title':'Hi, I’m Aurevo — a solo web designer specialized in single-file HTML landing pages and mini sites.','about.lead':'I focus on fast launch and easy maintenance: semantic markup, performance & SEO foundation, GA4 ready — helping small brands get professional websites efficiently.','about.p1':'<strong>End-to-end workflow</strong>: from planning, design, and frontend development to deployment — single point of contact, fast communication.','about.p2':'<strong>Lightweight & Efficient</strong>: single-file structure with optimized images/resources, <span class="muted">faster loading and easier long-term upkeep</span>.','about.p3':'<strong>SEO / Tracking Ready</strong>: Meta, OG, JSON-LD, GA4 events — <span class="muted">built to be found, not just look good</span>.','about.p4':'<strong>Transparent Collaboration</strong>: clear process, timeline and pricing, <span class="muted">iterate quickly, grow sustainably</span>.','about.btn1':'Let’s Talk','about.btn2':'View Templates','about.desc':'Common stack: semantic HTML, RWD, lightweight motion, lazyload, compression, preconnect, structured data, GA4. Turning simple one-pagers into <strong>clear, conversion-driven websites</strong>.','about.region':'Remote collaboration · Service areas: Taiwan / Malaysia','about.btn3':'Contact Me',
+    'sec.pricing':'Pricing','sec.pricing.lead':'One-time build fee, adjustable by scope.',
+    'plan.1':'Starter','plan.2':'Growth','plan.3':'Pro',
+    'price.p1':'From NT$3,000 / RM400 (one-time)','price.p2':'From NT$8,000 / RM1,100 (one-time)','price.p3':'From NT$15,000 / RM2,300 (one-time)',
+    'p1.f1':'Single-page HTML (RWD template)','p1.f2':'Home + work/menu + contact','p1.f3':'Deployment & launch included',
+    'p2.f1':'Semi-custom layout (colors / components)','p2.f2':'SEO meta / OG tags','p2.f3':'GA4 tracking','p2.f4':'Contact form (Formspree / Google Forms)',
+    'p3.f1':'Fully custom design','p3.f2':'Interactive motion','p3.f3':'Performance tuning (Lighthouse >90)','p3.f4':'Custom domain + SSL',
+    'sec.maint':'Maintenance plans','sec.maint.lead':'Stay stable, keep improving—and focus on your content and marketing.',
+    'plan.m1':'Basic maintenance','plan.m2':'Advanced maintenance','plan.m3':'Pro maintenance',
+    'price.m1':'From NT$500 / RM70 per month','price.m2':'From NT$1,300 / RM180 per month','price.m3':'From NT$2,500 / RM350 per month',
+    'm1.f1':'Site hosting (Cloudflare / GitHub Pages)','m1.f2':'1 minor change/month (copy / image)','m1.f3':'SSL upkeep',
+    'm2.f1':'Includes Basic','m2.f2':'Up to 3 minor changes/month','m2.f3':'GA4 / Search Console snapshot','m2.f4':'Baseline SEO',
+    'm3.f1':'Includes Advanced','m3.f2':'Unlimited edits','m3.f3':'Quarterly SEO report & recs','m3.f4':'Performance audits',
+    'maint.note':'Maintenance requires a minimum 6-month commitment.',
+    'sec.testimonials':'Testimonials','ts.1.txt':'“My personal-brand one-pager explains work, services, and contact in one place. Inquiries are more focused and easier to manage.”','ts.1.who':'— Solo Creator / Freelancer','ts.2.txt':'“Parents register smoothly on mobile; enrollment exceeded expectations this term, and teachers spend less time on admin.”','ts.2.who':'— Owner, Tutoring Center','ts.3.txt':'“Clear menu and contact, fast site, and visible on Google—calls and walk-in inquiries both went up.”','ts.3.who':'— Owner, Neighborhood Café',
+    'sec.stack':'Tech & tools','stack.1.title':'HTML5','stack.1.desc':'Semantic, accessible structure','stack.2.title':'CSS3','stack.2.desc':'Responsive layout & animation','stack.3.title':'JavaScript','stack.3.desc':'Snappy interactions & validation','stack.4.title':'Performance','stack.4.desc':'Lazyload, compression, preconnect','stack.5.title':'SEO / GA4','stack.5.desc':'Schema, meta, events','stack.6.title':'SVG & motion','stack.6.desc':'Crisp icons, subtle micro-interactions',
+    'sec.faq':'FAQ','faq.q1':'How long does it take?','faq.a1':'Depends on scope; typically 2~4 weeks. Commerce or multi-language by discussion.','faq.q2':'Do you offer end-to-end service?','faq.a2':'Yes—strategy, design, front-end, domain/hosting, and GA/SEO setup.','faq.q3':'What should I prepare?','faq.a3':'Brand assets, copy, and reference sites. If you don’t have them, I can help curate and plan.',
+    'sec.contact':'Contact / Get a quote','contact.other':'Other ways to reach me',
+    'form.name.label':'Your name','form.name.ph':'Jane Doe','form.email.label':'Email','form.email.ph':'you@example.com',
+    'form.budget.label':'Budget range (est.)','form.budget.opt0':'Please select','form.budget.opt1':'NT$ 3k+','form.budget.opt2':'NT$ 8k+','form.budget.opt3':'NT$ 15k+',
+    'form.timeline.label':'Desired timeline','form.timeline.opt1':'Within 2 weeks','form.timeline.opt2':'Within 1 month','form.timeline.opt3':'Flexible',
+    'form.msg.label':'Project brief','form.msg.ph':'Goals, pages, features, reference sites…',
+    'form.help':"Got it—I'll reply within 1–2 business days.",'form.submit':'Send request','ui.backTop':'Back to Top','form.required':'Please complete the required fields.','form.received':"Got it! I'll get back to you within 1–2 business days.",
+    'clients.business':'Business cases','clients.personal':'Personal profile cases',
+    'sec.addons':'Add-on Services','sec.addons.lead':'Optional upgrades you can mix and match.',
+    'addons.cat1':'Design & Features','addons.cat2':'Marketing & Analytics','addons.cat3':'Systems & Technical Support',
+    'ad1.1':'Multi-language site with language switcher','ad1.1.p':'+NT$3,000 / language','ad1.2':'Light/Dark mode (auto & manual toggle)','ad1.2.p':'+NT$1,500','ad1.3':'Brand palette & custom theme','ad1.3.p':'NT$2,000+','ad1.4':'Animations & scroll effects','ad1.4.p':'NT$2,000+','ad1.5':'Custom icon set','ad1.5.p':'NT$1,000+',
+    'ad2.1':'Google Map / Business embed','ad2.1.p':'+NT$800','ad2.2':'Meta / IG / LINE / YouTube integration','ad2.2.p':'NT$500+',
+    'ad3.1':'Custom domain + SSL setup','ad3.1.p':'NT$1,000+','ad3.2':'R2 / Cloudflare image hosting setup','ad3.2.p':'NT$1,500+','ad3.3':'Site backup & versioning (monthly)','ad3.3.p':'+NT$500 / month'
+  }
+};
       function setMeta(lang){const m=META[lang];if(!m)return;document.title=m.title;const md=document.querySelector('meta[name="description"]');md&&md.setAttribute('content',m.desc);const ogt=document.querySelector('meta[property="og:title"]');ogt&&ogt.setAttribute('content',m.ogTitle);const ogd=document.querySelector('meta[property="og:description"]');ogd&&ogd.setAttribute('content',m.ogDesc);const twt=document.querySelector('meta[name="twitter:title"]');twt&&twt.setAttribute('content',m.ogTitle);const twd=document.querySelector('meta[name="twitter:description"]');twd&&twd.setAttribute('content',m.ogDesc)}
       function applySelectors(lang){const pack=STRINGS[lang];if(!pack)return;SELECTOR_MAP.forEach(({sel,key,type,attr})=>{const el=document.querySelector(sel);if(!el)return;const val=pack[key];if(val==null)return;if(type==='html')el.innerHTML=val;else if(type==='attr')el.setAttribute(attr||'aria-label',val);else el.textContent=val})}
       function setLang(lang){const L=(lang==='en')?'en':'zh';document.documentElement.setAttribute('lang',L==='en'?'en':'zh-Hant');localStorage.setItem('lang',L);setMeta(L);applySelectors(L);const btn=document.getElementById('langToggle');btn&&(btn.textContent=(L==='zh')?'EN':'中')}
