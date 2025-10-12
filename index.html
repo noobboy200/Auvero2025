@@ -1,4 +1,4 @@
-<!doctype html>
+  <!doctype html>
 <html lang="zh-Hant">
 <head>
   <!-- ===== 基本資訊 ===== -->
@@ -242,10 +242,15 @@
     .top{position:fixed;right:16px;bottom:16px;padding:.6rem .8rem;border-radius:12px;border:1px solid var(--border);background:var(--card);display:none;z-index:999}
     .top.show{display:inline-flex}
 
-    /* ==== Reveal（保守預設：可見；載入後才進場）==== */
-    .reveal{opacity:1;transform:none}
-    .reveal._pending{opacity:0;transform:translateY(12px);transition:.6s}
-    .reveal.show{opacity:1;transform:none}
+    /* REVEAL: 淡入+上浮+去模糊；Hero 圖擦入；含無動作回退 */
+    .reveal{opacity:1;transform:none;filter:none}
+    .reveal._pending{opacity:0;transform:translateY(14px) scale(.985);filter:blur(6px);transition:opacity .78s cubic-bezier(.2,.7,0,1),transform .78s cubic-bezier(.2,.7,0,1),filter .78s cubic-bezier(.2,.7,0,1);transition-delay:var(--d,0s);will-change:transform,opacity,filter}
+    .reveal.show{opacity:1;transform:none;filter:none}
+    html[data-theme="dark"] .reveal._pending{filter:blur(8px)}
+    .hero-visual.reveal._pending img{clip-path:inset(0 0 100% 0 round 22px);transform:scale(1.04);transition:clip-path 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--d,0s) + .05s)}
+    .hero-visual.reveal.show img{clip-path:inset(0 0 0 0 round 22px);transform:scale(1)}
+    .card.reveal._pending,.service.card.reveal._pending{transform:translateY(16px) scale(.985)}
+    @media (prefers-reduced-motion:reduce){.reveal._pending{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}.hero-visual.reveal._pending img{clip-path:none!important;transform:none!important;transition:none!important}}
 
     /* ==== 小動畫 ==== */
     @keyframes menu-pop{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}
@@ -783,7 +788,19 @@ if ('IntersectionObserver' in window && tSec) {
     $('#year').textContent=new Date().getFullYear();
 
     /* ==== Reveal-on-scroll ==== */
-    function setupReveal(){const items=$$('.reveal');items.forEach(el=>el.classList.add('_pending'));if('IntersectionObserver'in window){const io=new IntersectionObserver((es)=>{es.forEach(({isIntersecting:t,target})=>{if(t){target.classList.add('show');target.classList.remove('_pending');io.unobserve(target)}})},{root:null,rootMargin:'0px 0px -10% 0px',threshold:0.1});items.forEach(el=>io.observe(el))}else{items.forEach(el=>{el.classList.add('show');el.classList.remove('_pending')})}}
+    function setupReveal(){
+      const items=$$('.reveal');if(!items.length)return;
+      items.forEach(el=>el.classList.add('_pending'));
+      const groups=new Map();
+      items.forEach(el=>{const key=el.closest('section,.container')||document.body;(groups.get(key)||groups.set(key,[]).get(key)).push(el)});
+      groups.forEach(arr=>arr.forEach((el,i)=>el.style.setProperty('--d',`${Math.min(i,8)*70}ms`)));
+      if('IntersectionObserver'in window){
+        const io=new IntersectionObserver(es=>{es.forEach(({isIntersecting:t,target:e})=>{if(t){e.classList.add('show');e.classList.remove('_pending');io.unobserve(e)}})},{root:null,rootMargin:'0px 0px -10% 0px',threshold:.08});
+        items.forEach(el=>io.observe(el));
+      }else{
+        items.forEach(el=>{el.classList.add('show');el.classList.remove('_pending')});
+      }
+    }
     onScroll(); /* 初次執行 */
 
     /* ==== Header 高度 → CSS 變數（更精準）==== */
